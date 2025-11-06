@@ -54,7 +54,7 @@ const GenerateBill = () => {
       const doc = new jsPDF();
       
       doc.setFontSize(20);
-      doc.text("BatteryHub", 105, 20, { align: "center" });
+      doc.text("MadhavAuto Store", 105, 20, { align: "center" });
       doc.setFontSize(12);
       doc.text("Tax Invoice", 105, 30, { align: "center" });
       

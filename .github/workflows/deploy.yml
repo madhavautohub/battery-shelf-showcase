@@ -1,3 +1,45 @@
+# name: Deploy to Firebase Hosting
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   build_and_deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#       - uses: actions/setup-node@v4
+#         with:
+#           node-version: '20'
+#       - run: npm ci
+#       - run: npm run build
+#       - name: Show workspace files (diagnostic)
+#         run: |
+#           pwd
+#           ls -la
+#           echo "-- root contents --"
+#           ls -la .
+#           echo "-- dist contents (if any) --"
+#           ls -la dist || true
+#       - name: Node / npm / npx versions (diagnostic)
+#         run: |
+#           node --version
+#           npm --version
+#           npx --version || true
+#       - name: Install Firebase CLI (ensures npx firebase-tools available)
+#         run: npm install -g firebase-tools@latest
+#       - uses: FirebaseExtended/action-hosting-deploy@v0
+#         with:
+#           repoToken: ${{ secrets.GITHUB_TOKEN }}
+#           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+#           # It's safer to store your Firebase project id in a repo secret named FIREBASE_PROJECT_ID
+#           # and set it in the repository settings. Replace below if you prefer a literal value.
+#           projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
+#           channelId: live
+#           entryPoint: .
+
 name: Deploy to Firebase Hosting
 
 on:
@@ -10,11 +52,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+
       - run: npm ci
+
       - run: npm run build
+
       - name: Show workspace files (diagnostic)
         run: |
           pwd
@@ -23,19 +69,21 @@ jobs:
           ls -la .
           echo "-- dist contents (if any) --"
           ls -la dist || true
+
       - name: Node / npm / npx versions (diagnostic)
         run: |
           node --version
           npm --version
           npx --version || true
-      - name: Install Firebase CLI (ensures npx firebase-tools available)
+
+      - name: Install Firebase CLI (latest compatible)
         run: npm install -g firebase-tools@latest
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          # It's safer to store your Firebase project id in a repo secret named FIREBASE_PROJECT_ID
-          # and set it in the repository settings. Replace below if you prefer a literal value.
           projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
           channelId: live
           entryPoint: .
